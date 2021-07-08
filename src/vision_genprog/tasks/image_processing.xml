@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<image_processing>
+	<function>
+		<name>threshold</name>
+		<parameter_types>[grayscale_image, int]</parameter_types>
+		<return_type>binary_image</return_type>
+	</function>
+	<function>
+		<name>mask_sum</name>
+		<parameter_types>[binary_image]</parameter_types>
+		<return_type>int</return_type>
+	</function>
+	<function>
+		<name>tunnel_grayscale_image</name>
+		<parameter_types>[grayscale_image]</parameter_types>
+		<return_type>grayscale_image</return_type>
+	</function>
+</image_processing>
