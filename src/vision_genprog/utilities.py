@@ -3,7 +3,7 @@ import numpy as np
 
 def ArrayToString(array):
     # Cf. https://stackoverflow.com/questions/30167538/convert-a-numpy-ndarray-to-stringor-bytes-and-convert-it-back-to-numpy-ndarray
-    return base64.binascii.b2a_base64(array).decode("ascii")
+    return base64.binascii.b2a_base64(array.astype(float)).decode("ascii")
 
 
 def StringTo1DArray(string_repr):
