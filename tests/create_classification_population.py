@@ -14,13 +14,13 @@ import vision_genprog.tasks.image_processing as image_processing
 parser = argparse.ArgumentParser()
 parser.add_argument('--imagesDirectory', help="The images directory. Default: './data/squares_vs_circles/'", default='./data/squares_vs_circles/')
 parser.add_argument('--classFilename', help="The filename of the classification file. Default: 'class.csv'", default='class.csv')
-parser.add_argument('--numberOfIndividuals', help="The number of individuals. Default: 100", type=int, default=100)
+parser.add_argument('--numberOfIndividuals', help="The number of individuals. Default: 64", type=int, default=64)
 parser.add_argument('--levelToFunctionProbabilityDict', help="The probability to generate a function, at each level. Default: '{0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1}'", default='{0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1}')
 parser.add_argument('--proportionOfConstants', help='The probability to generate a constant, when a variable could be used. Default: 0', type=float, default=0)
 parser.add_argument('--constantCreationParametersList', help="The parameters to use when creating constants: [minFloat, maxFloat, minInt, maxInt, width, height]. Default: '[-1, 1, 0, 255, 256, 256]'", default='[-1, 1, 0, 255, 256, 256]')
 parser.add_argument('--primitivesFilepath', help="The filepath to the XML file for the primitive functions. Default: './vision_genprog/tasks/image_processing.xml'", default='./vision_genprog/tasks/image_processing.xml')
 parser.add_argument('--outputDirectory', help="The output directory. Default: './outputs/'", default='./outputs/')
-parser.add_argument('--numberOfGenerations', help="The number of generations to run. Default: 10", type=int, default=10)
+parser.add_argument('--numberOfGenerations', help="The number of generations to run. Default: 32", type=int, default=32)
 parser.add_argument('--weightForNumberOfNodes', help="Penalty term proportional to the number of nodes. Default: 0.001", type=float, default=0.001)
 parser.add_argument('--numberOfTournamentParticipants', help="The number of participants in selection tournaments. Default: 2", type=int, default=2)
 parser.add_argument('--mutationProbability', help="The probability to mutate a child. Default: 0.1", type=float, default=0.1)
@@ -89,37 +89,43 @@ def main():
         returnType=return_type,
         weightForNumberOfElements=args.weightForNumberOfNodes
     )
-    #logging.debug("individual_to_cost_dict = \n{}".format(individual_to_cost_dict))
-    for generationNdx in range(1, args.numberOfGenerations + 1):
-        logging.info(" ***** Generation {} *****".format(generationNdx))
-        individual_to_cost_dict = classifiers_pop.NewGenerationWithTournament(
-            inputOutputTuplesList=train_inputOutputTuples_list,
-            variableNameToTypeDict=variableName_to_type,
-            interpreter=interpreter,
-            returnType=return_type,
-            numberOfTournamentParticipants=args.numberOfTournamentParticipants,
-            mutationProbability=args.mutationProbability,
-            currentIndividualToCostDict=individual_to_cost_dict,
-            proportionOfConstants=args.proportionOfConstants,
-            levelToFunctionProbabilityDict=levelToFunctionProbabilityDict,
-            functionNameToWeightDict=None,
-            constantCreationParametersList=constantCreationParametersList,
-            proportionOfNewIndividuals=args.proportionOfNewIndividuals,
-            weightForNumberOfElements=args.weightForNumberOfNodes,
-            maximumNumberOfMissedCreationTrials=args.maximumNumberOfMissedCreationTrials
-        )
+    with open(os.path.join(args.outputDirectory, "generations.csv"), 'w+') as generations_file:
+        generations_file.write("generation,lowest_cost,median_cost,validation_accuracy\n")
+        #logging.debug("individual_to_cost_dict = \n{}".format(individual_to_cost_dict))
+        for generationNdx in range(1, args.numberOfGenerations + 1):
+            logging.info(" ***** Generation {} *****".format(generationNdx))
+            individual_to_cost_dict = classifiers_pop.NewGenerationWithTournament(
+                inputOutputTuplesList=train_inputOutputTuples_list,
+                variableNameToTypeDict=variableName_to_type,
+                interpreter=interpreter,
+                returnType=return_type,
+                numberOfTournamentParticipants=args.numberOfTournamentParticipants,
+                mutationProbability=args.mutationProbability,
+                currentIndividualToCostDict=individual_to_cost_dict,
+                proportionOfConstants=args.proportionOfConstants,
+                levelToFunctionProbabilityDict=levelToFunctionProbabilityDict,
+                functionNameToWeightDict=None,
+                constantCreationParametersList=constantCreationParametersList,
+                proportionOfNewIndividuals=args.proportionOfNewIndividuals,
+                weightForNumberOfElements=args.weightForNumberOfNodes,
+                maximumNumberOfMissedCreationTrials=args.maximumNumberOfMissedCreationTrials
+            )
 
-        (champion, lowest_cost) = classifiers_pop.Champion(individual_to_cost_dict)
+            (champion, lowest_cost) = classifiers_pop.Champion(individual_to_cost_dict)
+            median_cost = classifiers_pop.MedianCost(individual_to_cost_dict)
 
-        # Validation
-        validation_accuracy = classifiersPop.Accuracy(champion, validation_inputOutputTuples_list, interpreter, variableName_to_type,
-                      return_type)
-        logging.info("Generation {}: lowest cost = {}; validation accuracy = {}".format(generationNdx, lowest_cost, validation_accuracy))
+            # Validation
+            validation_accuracy = classifiersPop.Accuracy(champion, validation_inputOutputTuples_list, interpreter, variableName_to_type,
+                          return_type)
+            logging.info("Generation {}: lowest cost = {}; median cost = {}; validation accuracy = {}".format(generationNdx, lowest_cost, median_cost, validation_accuracy))
+            generations_file.write("{},{},{},{}\n".format(generationNdx, lowest_cost, median_cost, validation_accuracy))
 
-        # Save the champion
-        champion_filepath = os.path.join(args.outputDirectory, "champion_{}_{:.4f}_{:.4f}.xml".format(generationNdx, lowest_cost,
-                                                                               validation_accuracy))
-        champion.Save(champion_filepath)
+            # Save the champion
+            champion_filepath = os.path.join(args.outputDirectory, "champion_{}_{:.4f}_{:.4f}.xml".format(generationNdx, lowest_cost,
+                                                                                   validation_accuracy))
+            champion.Save(champion_filepath)
+
+
 
 
 def ImageFilepaths(images_directory):
