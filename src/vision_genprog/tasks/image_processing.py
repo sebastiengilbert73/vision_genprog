@@ -79,6 +79,25 @@ class Interpreter(gp.Interpreter):
             return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'min_kernel3x3':
             return cv2.min(argumentsList[0], argumentsList[1])
+        elif functionName == 'intersection_over_union':
+            intersectionImg = cv2.min(argumentsList[0], argumentsList[1])
+            unionImg = cv2.max(argumentsList[0], argumentsList[1])
+            union_area = cv2.countNonZero(unionImg)
+            if union_area == 0:
+                return 0
+            else:
+                return cv2.countNonZero(intersectionImg)/union_area
+        elif functionName == 'canny':
+            return cv2.Canny(argumentsList[0], argumentsList[1], argumentsList[2])
+        elif functionName == 'corner_harris':
+            harrisImg = cv2.cornerHarris(argumentsList[0], blockSize=2, ksize=3, k=0.04)
+            harris_min = np.min(harrisImg)
+            harris_max = np.max(harrisImg)
+            if harris_max == harris_min:
+                harris_normalized = 255 * (harrisImg - harris_min)
+            else:
+                harris_normalized = 255 * (harrisImg - harris_min)/(harris_max - harris_min)
+            return harris_normalized.astype(np.uint8)
         else:
             raise NotImplementedError("image_processing.Interpreter.FunctionDefinition(): Not implemented function '{}'".format(functionName))
 
@@ -112,6 +131,7 @@ class Interpreter(gp.Interpreter):
             return vision_genprog.utilities.ArrayToString(random_img)
         elif returnType == 'kernel3x3':
             kernel = np.random.uniform(parametersList[0], parametersList[1], (3, 3))
+            kernel = (kernel - kernel.mean())/kernel.std()  # Standardization
             return vision_genprog.utilities.ArrayToString(kernel)
         elif returnType == 'float':
             if len(parametersList) < 2:
