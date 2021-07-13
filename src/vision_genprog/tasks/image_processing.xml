@@ -130,5 +130,19 @@
 		<parameter_types>[kernel3x3, kernel3x3]</parameter_types>
 		<return_type>kernel3x3</return_type>
 	</function>
-	
+	<function>
+		<name>intersection_over_union</name>
+		<parameter_types>[binary_image, binary_image]</parameter_types>
+		<return_type>float</return_type>
+	</function>
+	<function>
+		<name>canny</name>
+		<parameter_types>[grayscale_image, int, int]</parameter_types>
+		<return_type>binary_image</return_type>
+	</function>
+	<function>
+		<name>corner_harris</name>
+		<parameter_types>[grayscale_image]</parameter_types>
+		<return_type>grayscale_image</return_type>
+	</function>
 </image_processing>
