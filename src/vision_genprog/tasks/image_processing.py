@@ -68,6 +68,8 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'intersection':
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'union':
+            print("image_processing.Interpreter.FunctionDefinition() 'union': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
+                    argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'inverse_mask':
             return 255 - argumentsList[0]
