@@ -4,6 +4,7 @@ from typing import Dict, List, Any, Set, Optional, Union, Tuple
 import numpy as np
 import vision_genprog.utilities
 import cv2
+import logging
 
 possible_types = ['grayscale_image', 'color_image', 'binary_image',
                   'float', 'int', 'bool', 'vector2', 'kernel3x3']
@@ -55,6 +56,7 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'min':
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'max':
+            logging.debug("image_processing.Interpreter.FunctionDefinition() 'max': argumentsList[0].shape = {}; argumentsList[1].shape = {}".format(argumentsList[0], argumentsList[1]))
             return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'linear_combination':
             # w0 * a0 + w1 * a1 + b
