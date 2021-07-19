@@ -88,6 +88,8 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'min_kernel3x3':
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'intersection_over_union':
+            print("image_processing.Interpreter.FunctionDefinition() 'intersection_over_union': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
+                    argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             intersectionImg = cv2.min(argumentsList[0], argumentsList[1])
             unionImg = cv2.max(argumentsList[0], argumentsList[1])
             union_area = cv2.countNonZero(unionImg)
