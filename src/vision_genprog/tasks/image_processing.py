@@ -18,6 +18,7 @@ class Interpreter(gp.Interpreter):
 
 
     def FunctionDefinition(self, functionName: str, argumentsList: List[Any]) -> Any:
+        print ("image_processing.Interpreter.FunctionDefinition(): functionName = {}".format(functionName))
         if functionName == 'threshold':
             _, thresholdedImg = cv2.threshold(argumentsList[0], argumentsList[1], 255, cv2.THRESH_BINARY)
             return thresholdedImg
