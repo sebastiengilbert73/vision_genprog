@@ -115,7 +115,7 @@ class Interpreter(gp.Interpreter):
                         returnType, len(parametersList)))
             min_value = np.random.randint(parametersList[2], parametersList[3])
             max_value = np.random.randint(parametersList[2], parametersList[3])
-            random_img = np.random.randint(min_value, max_value, self.image_shapeHWC)
+            random_img = np.random.randint(min(min_value, max_value), max(min_value, max_value), self.image_shapeHWC)
             return vision_genprog.utilities.ArrayToString(random_img)
         elif returnType == 'color_image':
             if len(parametersList) < 6:
@@ -125,7 +125,7 @@ class Interpreter(gp.Interpreter):
             #black_img = np.zeros((parametersList[5], parametersList[4], 3), dtype=np.uint8)
             min_value = np.random.randint(parametersList[2], parametersList[3])
             max_value = np.random.randint(parametersList[2], parametersList[3])
-            random_img = np.random.randint(min_value, max_value, self.image_shapeHWC)
+            random_img = np.random.randint((min(min_value, max_value), max(min_value, max_value), self.image_shapeHWC)
             return vision_genprog.utilities.ArrayToString(random_img)
         elif returnType == 'binary_image':
             if len(parametersList) < 6:
