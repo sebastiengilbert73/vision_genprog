@@ -58,8 +58,9 @@ class Interpreter(gp.Interpreter):
                     argumentsList[0].shape, argumentsList[1].shape))
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'max':
-            print("image_processing.Interpreter.FunctionDefinition() 'max': argumentsList[0].shape = {}; argumentsList[1].shape = {}".format(argumentsList[0], argumentsList[1]))
-            return cv2.max(argumentsList[0].shape, argumentsList[1].shape)
+            print("image_processing.Interpreter.FunctionDefinition() 'max': argumentsList[0].shape = {}; argumentsList[1].shape = {}".format(
+                argumentsList[0].shape, argumentsList[1].shape))
+            return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'linear_combination':
             # w0 * a0 + w1 * a1 + b
             return (argumentsList[0] * argumentsList[1] + argumentsList[2] * argumentsList[3] + argumentsList[4]).astype(np.uint8)
