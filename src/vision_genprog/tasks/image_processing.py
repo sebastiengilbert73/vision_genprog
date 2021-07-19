@@ -54,12 +54,12 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'laplacian3':
             return cv2.Laplacian(argumentsList[0], ddepth=cv2.CV_8U, ksize=3)
         elif functionName == 'min':
-            print("image_processing.Interpreter.FunctionDefinition() 'min': argumentsList[0].shape = {}; argumentsList[1].shape = {}".format(
-                    argumentsList[0].shape, argumentsList[1].shape))
+            print("image_processing.Interpreter.FunctionDefinition() 'min': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
+                    argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'max':
-            print("image_processing.Interpreter.FunctionDefinition() 'max': argumentsList[0].shape = {}; argumentsList[1].shape = {}".format(
-                argumentsList[0].shape, argumentsList[1].shape))
+            print("image_processing.Interpreter.FunctionDefinition() 'max': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
+                argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'linear_combination':
             # w0 * a0 + w1 * a1 + b
