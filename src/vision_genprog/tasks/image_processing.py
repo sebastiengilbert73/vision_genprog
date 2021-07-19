@@ -18,7 +18,6 @@ class Interpreter(gp.Interpreter):
 
 
     def FunctionDefinition(self, functionName: str, argumentsList: List[Any]) -> Any:
-        print ("image_processing.Interpreter.FunctionDefinition(): functionName = {}".format(functionName))
         if functionName == 'threshold':
             _, thresholdedImg = cv2.threshold(argumentsList[0], argumentsList[1], 255, cv2.THRESH_BINARY)
             return thresholdedImg
@@ -55,12 +54,8 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'laplacian3':
             return cv2.Laplacian(argumentsList[0], ddepth=cv2.CV_8U, ksize=3)
         elif functionName == 'min':
-            print("image_processing.Interpreter.FunctionDefinition() 'min': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
-                    argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'max':
-            print("image_processing.Interpreter.FunctionDefinition() 'max': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
-                argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'linear_combination':
             # w0 * a0 + w1 * a1 + b
@@ -68,8 +63,6 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'intersection':
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'union':
-            print("image_processing.Interpreter.FunctionDefinition() 'union': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
-                    argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             return cv2.max(argumentsList[0], argumentsList[1])
         elif functionName == 'inverse_mask':
             return 255 - argumentsList[0]
@@ -88,8 +81,6 @@ class Interpreter(gp.Interpreter):
         elif functionName == 'min_kernel3x3':
             return cv2.min(argumentsList[0], argumentsList[1])
         elif functionName == 'intersection_over_union':
-            print("image_processing.Interpreter.FunctionDefinition() 'intersection_over_union': argumentsList[0].shape = {}; argumentsList[1].shape = {}; argumentsList[0].dtype = {}; argumentsList[1].dtype = {}".format(
-                    argumentsList[0].shape, argumentsList[1].shape, argumentsList[0].dtype, argumentsList[1].dtype))
             intersectionImg = cv2.min(argumentsList[0], argumentsList[1])
             unionImg = cv2.max(argumentsList[0], argumentsList[1])
             union_area = cv2.countNonZero(unionImg)
